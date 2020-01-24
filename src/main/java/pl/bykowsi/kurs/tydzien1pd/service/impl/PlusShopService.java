@@ -37,7 +37,7 @@ public class PlusShopService implements ShopService {
         }
         System.out.println("----------------------------");
         System.out.println("Sum of price: " + sum + "PLN");
-
+        System.out.println("----------------------------");
         System.out.println("Gross price = " + sum.multiply(BigDecimal.valueOf(100+VAT).divide(BigDecimal.valueOf(100)))
                 + "PLN = " + sum + "PLN * 1." + VAT + " ");
     }

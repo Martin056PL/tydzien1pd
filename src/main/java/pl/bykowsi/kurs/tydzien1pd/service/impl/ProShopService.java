@@ -28,7 +28,6 @@ public class ProShopService implements ShopService {
         this.basket = basket;
     }
 
-    @EventListener(ApplicationReadyEvent.class)
     @Override
     public void calculateFinalPrice(){
         List<Product> list = basket.getBasket();
@@ -42,7 +41,9 @@ public class ProShopService implements ShopService {
 
         System.out.println("----------------------------");
         System.out.println("Sum of price: " + sum + "PLN");
+        System.out.println("----------------------------");
         System.out.println("Gross price = " + grossPrice + "PLN = " + sum + "PLN * 1." + VAT + " ");
+        System.out.println("----------------------------");
         System.out.println("Gross price with discount = " + discountedGrossPrice
                 + "PLN = " + grossPrice + "PLN * 0." + (100-discount) + " ");
     }
