@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class PlusShopService extends StartShopService implements ShopService {
 
     protected final BigDecimal VAT;
-    private static final BigDecimal hundred = BigDecimal.valueOf(100);
+    protected static final BigDecimal hundred = BigDecimal.valueOf(100);
 
     @Autowired
     public PlusShopService(Basket basket, LanguageSettings languageSettings, @Value("${price.VAT}") Integer VAT) {
