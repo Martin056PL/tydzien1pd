@@ -11,8 +11,8 @@ public interface ShopService {
 
     void calculateFinalPrice();
 
-    default BigDecimal calculateBasket(Basket basket, LanguageSettings languageSettings){
-        List<Product> list = basket.getBasket();
+    default BigDecimal calculateBasket(Basket basket, LanguageSettings languageSettings) {
+        List<Product> list = basket.createAndGetRandomBasket();
         list.forEach(p -> System.out.println(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
         return list.stream()
                 .map(Product::getPrice)

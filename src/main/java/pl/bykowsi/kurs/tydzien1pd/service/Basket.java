@@ -1,7 +1,7 @@
 package pl.bykowsi.kurs.tydzien1pd.service;
 
 import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.random.RandomGeneratorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.bykowsi.kurs.tydzien1pd.model.Product;
@@ -9,30 +9,27 @@ import pl.bykowsi.kurs.tydzien1pd.model.Product;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Component
 public class Basket {
 
-    private List<Product> productsList;
-    private static final RandomGenerator randomGenerator = RandomGeneratorFactory.createRandomGenerator(new Random());
+    private final RandomGenerator randomGenerator;
     private final int MaxPrice;
     private final int MinPrice;
+    private static final Integer quantityOfProducts = 5;
 
-    private Basket(@Value("${price.MaxPrice}")int maxPrice, @Value("${price.MinPrice}")int minPrice) {
+    @Autowired
+    private Basket(RandomGenerator randomGenerator, @Value("${price.MaxPrice}") int maxPrice, @Value("${price.MinPrice}") int minPrice) {
+        this.randomGenerator = randomGenerator;
         this.MaxPrice = maxPrice;
         this.MinPrice = minPrice;
     }
 
-    public List<Product> getBasket() {
-        return productsList = createRandomBasket();
-    }
-
-    private List<Product> createRandomBasket() {
+    public List<Product> createAndGetRandomBasket() {
         List<Product> defaultList = createListOfDifferentProducts();
         List<Product> finalList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            int productIndex = randomGenerator.nextInt(5);
+        for (int i = 0; i < quantityOfProducts; i++) {
+            int productIndex = randomGenerator.nextInt(defaultList.size());
             finalList.add(defaultList.get(productIndex));
         }
         return finalList;

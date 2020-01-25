@@ -13,25 +13,20 @@ import java.math.BigDecimal;
 
 @Service
 @Profile("plus")
-public class PlusShopService implements ShopService {
+public class PlusShopService extends StartShopService implements ShopService {
 
-    private final Basket basket;
-    private final BigDecimal VAT;
-    private BigDecimal sum;
-    private final LanguageSettings languageSettings;
+    protected final BigDecimal VAT;
     private static final BigDecimal hundred = BigDecimal.valueOf(100);
 
     @Autowired
-    public PlusShopService(@Value("${price.VAT}") Integer VAT, Basket basket, LanguageSettings languageSettings) {
+    public PlusShopService(Basket basket, LanguageSettings languageSettings, @Value("${price.VAT}") Integer VAT) {
+        super(basket, languageSettings);
         this.VAT = BigDecimal.valueOf(VAT);
-        this.basket = basket;
-        this.sum = BigDecimal.ZERO;
-        this.languageSettings = languageSettings;
     }
 
     @Override
     public void calculateFinalPrice() {
-        sum = calculateBasket(basket,languageSettings);
+        BigDecimal sum = calculateBasket(basket, languageSettings);
         BigDecimal grossSum = sum.multiply(hundred.add(VAT).divide(hundred));
         PrintInfo.PlusPrintData(languageSettings, sum, grossSum, VAT);
     }

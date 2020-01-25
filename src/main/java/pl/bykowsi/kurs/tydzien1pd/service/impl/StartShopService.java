@@ -14,21 +14,19 @@ import java.math.BigDecimal;
 @Profile("start")
 public class StartShopService implements ShopService {
 
-    private final Basket basket;
-    private BigDecimal sum;
-    private final LanguageSettings languageSettings;
+    protected final Basket basket;
+    protected final LanguageSettings languageSettings;
 
 
     @Autowired
     public StartShopService(Basket basket, LanguageSettings languageSettings) {
         this.basket = basket;
-        this.sum = BigDecimal.ZERO;
         this.languageSettings = languageSettings;
     }
 
     @Override
     public void calculateFinalPrice() {
-        sum = calculateBasket(basket,languageSettings);
+        BigDecimal sum = calculateBasket(basket, languageSettings);
         PrintInfo.StartPrintData(languageSettings, sum);
     }
 }
