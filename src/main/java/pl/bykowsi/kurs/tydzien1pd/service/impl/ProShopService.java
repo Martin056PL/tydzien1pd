@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
 import pl.bykowsi.kurs.tydzien1pd.model.Product;
 import pl.bykowsi.kurs.tydzien1pd.screeninfo.PrintInfo;
 import pl.bykowsi.kurs.tydzien1pd.service.Basket;
@@ -22,24 +23,22 @@ public class ProShopService implements ShopService {
     private final BigDecimal VAT;
     private final BigDecimal discount;
     private BigDecimal sum;
-    private MessageSource messageSource;
-    private final String languageVersion;
+    private final LanguageSettings languageSettings;
     private static final BigDecimal hundred = BigDecimal.valueOf(100);
 
     @Autowired
-    public ProShopService(@Value("${price.VAT}") Integer VAT, @Value("${price.discount}") Integer discount, Basket basket, MessageSource messageSource, @Value("${language.languageVersion}") String languageVersion) {
+    public ProShopService(@Value("${price.VAT}") Integer VAT, @Value("${price.discount}") Integer discount, Basket basket, LanguageSettings languageSettings) {
         this.VAT = BigDecimal.valueOf(VAT);
         this.discount = BigDecimal.valueOf(discount);
         this.basket = basket;
         this.sum = BigDecimal.ZERO;
-        this.messageSource = messageSource;
-        this.languageVersion = languageVersion;
+        this.languageSettings = languageSettings;
     }
 
     @Override
     public void calculateFinalPrice() {
         List<Product> list = basket.getBasket();
-        list.forEach(p -> System.out.println(messageSource.getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageVersion))));
+        list.forEach(p -> System.out.println(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
         sum = list.stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -47,7 +46,7 @@ public class ProShopService implements ShopService {
         BigDecimal grossPrice = sum.multiply(hundred.add(VAT)).divide(hundred);
         BigDecimal discountedGrossPrice = grossPrice.multiply(hundred.subtract(discount)).divide(hundred);
 
-        PrintInfo.ProPrintData(messageSource, sum, languageVersion, grossPrice, VAT, discountedGrossPrice, 100 - discount.intValue());
+        PrintInfo.ProPrintData(languageSettings, sum,  grossPrice, VAT, discountedGrossPrice, 100 - discount.intValue());
     }
 
 }
