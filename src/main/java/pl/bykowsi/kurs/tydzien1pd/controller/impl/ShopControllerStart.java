@@ -20,7 +20,7 @@ public class ShopControllerStart implements ShopController {
 
     @Override
     @EventListener(ApplicationReadyEvent.class)
-    public void start(){
+    public void start() {
         service.calculateFinalPrice();
     }
 

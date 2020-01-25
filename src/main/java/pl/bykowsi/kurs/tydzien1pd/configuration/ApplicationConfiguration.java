@@ -8,7 +8,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 public class ApplicationConfiguration {
 
     @Bean
-    public ReloadableResourceBundleMessageSource messageSource(){
+    public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
         source.setBasename("classpath:i18n/messages");
         source.setDefaultEncoding("UTF-8");

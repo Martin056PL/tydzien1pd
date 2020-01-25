@@ -1,10 +1,10 @@
-package pl.bykowsi.kurs.tydzien1pd.model;
+package pl.bykowsi.kurs.tydzien1pd.service;
 
-import lombok.Getter;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.random.RandomGeneratorFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import pl.bykowsi.kurs.tydzien1pd.model.Product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
