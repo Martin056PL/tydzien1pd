@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
-import pl.bykowsi.kurs.tydzien1pd.screeninfo.PrintInfo;
+import pl.bykowsi.kurs.tydzien1pd.model.PriceCalculationsData;
+import pl.bykowsi.kurs.tydzien1pd.screeninfo.PrintMessages;
 import pl.bykowsi.kurs.tydzien1pd.service.Basket;
 import pl.bykowsi.kurs.tydzien1pd.service.ShopService;
 
@@ -16,17 +17,24 @@ public class StartShopService implements ShopService {
 
     protected final Basket basket;
     protected final LanguageSettings languageSettings;
+    protected PriceCalculationsData priceCalculationsData;
 
 
     @Autowired
-    public StartShopService(Basket basket, LanguageSettings languageSettings) {
+    public StartShopService(Basket basket, LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         this.basket = basket;
         this.languageSettings = languageSettings;
+        this.priceCalculationsData = priceCalculationsData;
     }
 
     @Override
     public void calculateFinalPrice() {
         BigDecimal sum = calculateBasket(basket, languageSettings);
-        PrintInfo.StartPrintData(languageSettings, sum);
+        setCalculationData(sum);
+        PrintMessages.StartPrintData(languageSettings, priceCalculationsData);
+    }
+
+    private void setCalculationData(BigDecimal sum){
+        priceCalculationsData.setSum(sum);
     }
 }
