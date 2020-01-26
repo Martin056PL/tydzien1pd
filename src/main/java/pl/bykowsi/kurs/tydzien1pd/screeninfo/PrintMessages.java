@@ -4,13 +4,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
 import pl.bykowsi.kurs.tydzien1pd.model.PriceCalculationsData;
+import pl.bykowsi.kurs.tydzien1pd.model.Product;
 
+import java.util.List;
 import java.util.Locale;
 
 
 public class PrintMessages {
 
     private static Logger logger = LoggerFactory.getLogger(PrintMessages.class);
+
+    public static void printBasket(List<Product> list, LanguageSettings languageSettings) {
+        logger.warn("");
+        list.forEach(p -> logger.warn(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
+    }
 
     public static void StartPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         printUnderline(languageSettings);
@@ -44,5 +51,6 @@ public class PrintMessages {
     private static void printUnderline(LanguageSettings languageSettings) {
         logger.warn(languageSettings.getMessageSource().getMessage("underline", new Object[]{}, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
     }
+
 
 }

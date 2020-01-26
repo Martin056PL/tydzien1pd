@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
 import pl.bykowsi.kurs.tydzien1pd.model.PriceCalculationsData;
+import pl.bykowsi.kurs.tydzien1pd.model.Product;
 import pl.bykowsi.kurs.tydzien1pd.screeninfo.PrintMessages;
 import pl.bykowsi.kurs.tydzien1pd.service.Basket;
 import pl.bykowsi.kurs.tydzien1pd.service.ShopService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @Profile("pro")
@@ -26,7 +28,9 @@ public class ProShopService extends PlusShopService implements ShopService {
 
     @Override
     public void calculateFinalPrice() {
-        BigDecimal sum = calculateBasket(basket, languageSettings);
+        List<Product> generatedBasket = CreateBasket(basket);
+        PrintMessages.printBasket(generatedBasket, languageSettings);
+        BigDecimal sum = calculateBasket(generatedBasket);
         BigDecimal grossPrice = sum.multiply(hundred.add(VAT)).divide(hundred);
         BigDecimal discountedGrossPrice = grossPrice.multiply(hundred.subtract(discount)).divide(hundred);
         BigDecimal discountRatio = hundred.subtract(discount);
