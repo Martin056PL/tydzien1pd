@@ -17,7 +17,7 @@ public interface ShopService {
 
     default BigDecimal calculateBasket(Basket basket, LanguageSettings languageSettings) {
         List<Product> list = basket.createAndGetRandomBasket();
-        list.forEach(p -> logger.info(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
+        list.forEach(p -> logger.warn(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
         return list.stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

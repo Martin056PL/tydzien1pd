@@ -14,7 +14,7 @@ public class PrintMessages {
 
     public static void StartPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         printUnderline(languageSettings);
-        logger.info(languageSettings.getMessageSource().getMessage("startSum", new Object[]{
+        logger.warn(languageSettings.getMessageSource().getMessage("startSum", new Object[]{
                 priceCalculationsData.getSum()
         }, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
     }
@@ -22,7 +22,7 @@ public class PrintMessages {
     public static void PlusPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         StartPrintData(languageSettings, priceCalculationsData);
         printUnderline(languageSettings);
-        logger.info(languageSettings.getMessageSource().getMessage("plusSum", new Object[]{
+        logger.warn(languageSettings.getMessageSource().getMessage("plusSum", new Object[]{
                 priceCalculationsData.getGrossPrice(),
                 priceCalculationsData.getSum(),
                 priceCalculationsData.getVAT()
@@ -33,7 +33,7 @@ public class PrintMessages {
     public static void ProPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         PlusPrintData(languageSettings, priceCalculationsData);
         printUnderline(languageSettings);
-        logger.info(languageSettings.getMessageSource().getMessage("proSum", new Object[]{
+        logger.warn(languageSettings.getMessageSource().getMessage("proSum", new Object[]{
                 priceCalculationsData.getDiscountedGrossPrice(),
                 priceCalculationsData.getGrossPrice(),
                 priceCalculationsData.getDiscountRatio()
@@ -42,7 +42,7 @@ public class PrintMessages {
     }
 
     private static void printUnderline(LanguageSettings languageSettings) {
-        logger.info(languageSettings.getMessageSource().getMessage("underline", new Object[]{}, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
+        logger.warn(languageSettings.getMessageSource().getMessage("underline", new Object[]{}, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
     }
 
 }
