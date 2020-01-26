@@ -1,5 +1,7 @@
 package pl.bykowsi.kurs.tydzien1pd.screeninfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
 import pl.bykowsi.kurs.tydzien1pd.model.PriceCalculationsData;
 
@@ -8,9 +10,11 @@ import java.util.Locale;
 
 public class PrintMessages {
 
+    private static Logger logger = LoggerFactory.getLogger(PrintMessages.class);
+
     public static void StartPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         printUnderline(languageSettings);
-        System.out.println(languageSettings.getMessageSource().getMessage("startSum", new Object[]{
+        logger.info(languageSettings.getMessageSource().getMessage("startSum", new Object[]{
                 priceCalculationsData.getSum()
         }, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
     }
@@ -18,7 +22,7 @@ public class PrintMessages {
     public static void PlusPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         StartPrintData(languageSettings, priceCalculationsData);
         printUnderline(languageSettings);
-        System.out.println(languageSettings.getMessageSource().getMessage("plusSum", new Object[]{
+        logger.info(languageSettings.getMessageSource().getMessage("plusSum", new Object[]{
                 priceCalculationsData.getGrossPrice(),
                 priceCalculationsData.getSum(),
                 priceCalculationsData.getVAT()
@@ -29,7 +33,7 @@ public class PrintMessages {
     public static void ProPrintData(LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData) {
         PlusPrintData(languageSettings, priceCalculationsData);
         printUnderline(languageSettings);
-        System.out.println(languageSettings.getMessageSource().getMessage("proSum", new Object[]{
+        logger.info(languageSettings.getMessageSource().getMessage("proSum", new Object[]{
                 priceCalculationsData.getDiscountedGrossPrice(),
                 priceCalculationsData.getGrossPrice(),
                 priceCalculationsData.getDiscountRatio()
@@ -38,7 +42,7 @@ public class PrintMessages {
     }
 
     private static void printUnderline(LanguageSettings languageSettings) {
-        System.out.println(languageSettings.getMessageSource().getMessage("underline", new Object[]{}, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
+        logger.info(languageSettings.getMessageSource().getMessage("underline", new Object[]{}, Locale.forLanguageTag(languageSettings.getLanguageVersion())));
     }
 
 }

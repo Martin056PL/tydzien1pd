@@ -1,5 +1,7 @@
 package pl.bykowsi.kurs.tydzien1pd.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
 import pl.bykowsi.kurs.tydzien1pd.model.Product;
 
@@ -9,11 +11,13 @@ import java.util.Locale;
 
 public interface ShopService {
 
+    Logger logger = LoggerFactory.getLogger(ShopService.class);
+
     void calculateFinalPrice();
 
     default BigDecimal calculateBasket(Basket basket, LanguageSettings languageSettings) {
         List<Product> list = basket.createAndGetRandomBasket();
-        list.forEach(p -> System.out.println(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
+        list.forEach(p -> logger.info(languageSettings.getMessageSource().getMessage("singleProductPosition", new Object[]{p.getName(), p.getPrice()}, Locale.forLanguageTag(languageSettings.getLanguageVersion()))));
         return list.stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
