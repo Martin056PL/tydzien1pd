@@ -13,10 +13,11 @@ import java.util.List;
 @Component
 public class Basket {
 
+
+    private static final Integer quantityOfProducts = 5;
     private final RandomGenerator randomGenerator;
     private final int MaxPrice;
     private final int MinPrice;
-    private static final Integer quantityOfProducts = 5;
 
     @Autowired
     private Basket(RandomGenerator randomGenerator, @Value("${price.MaxPrice}") int maxPrice, @Value("${price.MinPrice}") int minPrice) {

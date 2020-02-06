@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
 import pl.bykowsi.kurs.tydzien1pd.model.PriceCalculationsData;
 import pl.bykowsi.kurs.tydzien1pd.model.Product;
-import pl.bykowsi.kurs.tydzien1pd.screeninfo.PrintMessages;
+import pl.bykowsi.kurs.tydzien1pd.screeninfo.MessagesPrinter;
 import pl.bykowsi.kurs.tydzien1pd.service.Basket;
 import pl.bykowsi.kurs.tydzien1pd.service.ShopService;
 
@@ -31,13 +31,13 @@ public class PlusShopService extends StartShopService implements ShopService {
     public void calculateFinalPrice() {
 
         List<Product> generatedBasket = CreateBasket(basket);
-        PrintMessages.printBasket(generatedBasket, languageSettings);
+        MessagesPrinter.printBasket(generatedBasket, languageSettings);
         BigDecimal sum = calculateBasket(generatedBasket);
         BigDecimal grossPrice = sum.multiply(hundred.add(VAT).divide(hundred));
 
         setCalculationData(sum, grossPrice);
 
-        PrintMessages.PlusPrintData(languageSettings, priceCalculationsData);
+        MessagesPrinter.plusPrintData(languageSettings, priceCalculationsData);
     }
 
     private void setCalculationData(BigDecimal sum, BigDecimal grossPrice) {
