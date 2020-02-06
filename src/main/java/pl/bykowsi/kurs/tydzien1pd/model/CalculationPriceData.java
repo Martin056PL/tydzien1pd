@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Component
 @Data
-public class PriceCalculationsData {
+public class CalculationPriceData {
 
     private BigDecimal sum;
     private BigDecimal VAT;

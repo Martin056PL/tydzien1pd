@@ -4,15 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSettings;
-import pl.bykowsi.kurs.tydzien1pd.model.PriceCalculationsData;
-import pl.bykowsi.kurs.tydzien1pd.model.Product;
-import pl.bykowsi.kurs.tydzien1pd.screeninfo.MessagesPrinter;
-import pl.bykowsi.kurs.tydzien1pd.service.Basket;
+import pl.bykowsi.kurs.tydzien1pd.configuration.LanguageSetting;
+import pl.bykowsi.kurs.tydzien1pd.generator.BasketGenerator;
+import pl.bykowsi.kurs.tydzien1pd.model.Basket;
+import pl.bykowsi.kurs.tydzien1pd.model.CalculationPriceData;
+import pl.bykowsi.kurs.tydzien1pd.screenmessage.MessagePrinter;
 import pl.bykowsi.kurs.tydzien1pd.service.ShopService;
 
 import java.math.BigDecimal;
-import java.util.List;
+
+import static pl.bykowsi.kurs.tydzien1pd.utils.CalculatorUtil.*;
 
 @Service
 @Profile("pro")
@@ -21,31 +22,41 @@ public class ProShopService extends PlusShopService implements ShopService {
     protected final BigDecimal discount;
 
     @Autowired
-    public ProShopService(Basket basket, LanguageSettings languageSettings, PriceCalculationsData priceCalculationsData, @Value("${price.VAT}") Integer VAT, @Value("${price.discount}") Integer discount) {
-        super(basket, languageSettings, priceCalculationsData, VAT);
+    public ProShopService(BasketGenerator basketGenerator,
+                          LanguageSetting languageSetting,
+                          CalculationPriceData calculationPriceData,
+                          @Value("${price.VAT}") Integer VAT,
+                          @Value("${price.discount}") Integer discount) {
+        super(basketGenerator, languageSetting, calculationPriceData, VAT);
         this.discount = BigDecimal.valueOf(discount);
     }
 
     @Override
     public void calculateFinalPrice() {
-        List<Product> generatedBasket = CreateBasket(basket);
-        MessagesPrinter.printBasket(generatedBasket, languageSettings);
-        BigDecimal sum = calculateBasket(generatedBasket);
-        BigDecimal grossPrice = sum.multiply(hundred.add(VAT)).divide(hundred);
-        BigDecimal discountedGrossPrice = grossPrice.multiply(hundred.subtract(discount)).divide(hundred);
-        BigDecimal discountRatio = hundred.subtract(discount);
-
-        setCalculationData(discountRatio, sum, grossPrice, discountedGrossPrice);
-
-        MessagesPrinter.proPrintData(languageSettings, priceCalculationsData);
+        Basket generatedBasket = createBasket(basketGenerator);
+        MessagePrinter.printBasket(generatedBasket, languageSetting);
+        calculateBasketValue(generatedBasket);
+        MessagePrinter.proPrintData(languageSetting, calculationPriceData);
     }
 
-    private void setCalculationData(BigDecimal discountRatio, BigDecimal sum, BigDecimal grossPrice, BigDecimal discountedGrossPrice) {
-        priceCalculationsData.setSum(sum);
-        priceCalculationsData.setGrossPrice(grossPrice);
-        priceCalculationsData.setDiscountedGrossPrice(discountedGrossPrice);
-        priceCalculationsData.setVAT(VAT);
-        priceCalculationsData.setDiscountRatio(discountRatio);
+    private void calculateBasketValue(Basket basket) {
+        BigDecimal sum = calculateBasket(basket);
+        BigDecimal grossPrice = calculateGrossPrice(sum, VAT);
+        BigDecimal discountedGrossPrice = calculateDiscountedGrossPrice(grossPrice, discount);
+        BigDecimal discountRatio = calculateDiscountRatio(discount);
+        setCalculationData(discountRatio, sum, grossPrice, discountedGrossPrice);
+    }
+
+
+    private void setCalculationData(BigDecimal discountRatio,
+                                    BigDecimal sum,
+                                    BigDecimal grossPrice,
+                                    BigDecimal discountedGrossPrice) {
+        calculationPriceData.setSum(sum);
+        calculationPriceData.setGrossPrice(grossPrice);
+        calculationPriceData.setDiscountedGrossPrice(discountedGrossPrice);
+        calculationPriceData.setVAT(VAT);
+        calculationPriceData.setDiscountRatio(discountRatio);
     }
 
 }

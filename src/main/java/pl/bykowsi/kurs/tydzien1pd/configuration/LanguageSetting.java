@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Getter
-public class LanguageSettings {
+public class LanguageSetting {
 
     private final MessageSource messageSource;
     private final String languageVersion;
 
     @Autowired
-    public LanguageSettings(MessageSource messageSource, @Value("${language.languageVersion}") String languageVersion) {
+    public LanguageSetting(MessageSource messageSource, @Value("${language.languageVersion}") String languageVersion) {
         this.messageSource = messageSource;
         this.languageVersion = languageVersion;
     }
